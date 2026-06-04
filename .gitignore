@@ -1,0 +1,42 @@
+# OS and editor metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# OneDrive / Office temporary files
+~$*
+*.tmp
+*.temp
+*.bak
+
+# Python caches and environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Build and export outputs
+build/
+dist/
+out/
+output/
+outputs/
+exports/
+*.log
+
+# Local app/tool state
+.env
+.env.*
+!.env.example
+node_modules/
+.cache/
