@@ -56,7 +56,7 @@ homework13_colorization/
 6. 在 `notes/code_analysis.md` 中记录关键代码功能和运行过程。
 7. 在 `report.md` 中简要展示实验结果，并结合论文方法进行分析。
 
-目前阶段只建立项目结构和说明文件，暂不克隆代码，也不撰写完整阅读报告。
+目前已完成一次官方 demo 运行，实验输出见本文档“运行结果”部分。完整阅读报告仍在后续整理中。
 
 ## 五、最终提交物说明
 
@@ -70,3 +70,53 @@ homework13_colorization/
 - 第三方代码或代码来源说明：`third_party/`
 
 如果完成选做实验，将在报告中补充算法运行结果和必要的截图说明。
+
+## 六、运行结果
+
+本项目已使用 `richzhang/colorization` 官方 PyTorch demo 对自选灰度图像进行一次彩色化实验。主结果采用 ECCV 2016 论文对应的 ECCV16 模型输出。
+
+### 1. 结果文件
+
+实验结果保存在 `results/` 目录下，主要文件如下：
+
+- 输入灰度图：`results/input_image_gray.png`
+- 输出彩色图：`results/output_colorized.png`
+- 输入输出对比图：`results/comparison.png`
+- 终端运行成功截图：`results/terminal_success.png`
+
+其中，`comparison.png` 将输入灰度图和输出彩色图并排显示，适合放入报告正文中进行结果展示。
+
+### 2. 运行命令
+
+复制输入图像到实验输入目录：
+
+```powershell
+Copy-Item -LiteralPath .\input_image.jpg -Destination .\homework13_colorization\data\input\input_image.jpg -Force
+```
+
+运行官方 demo：
+
+```powershell
+cd .\homework13_colorization\third_party\colorization
+$env:MPLBACKEND='Agg'
+.\.venv\Scripts\python.exe demo_release.py -i ..\..\data\input\input_image.jpg -o ..\..\results\input_image_colorized
+```
+
+保存 ECCV16 输出作为主彩色化结果：
+
+```powershell
+cd ..\..\..
+Copy-Item -LiteralPath .\homework13_colorization\results\input_image_colorized_eccv16.png -Destination .\homework13_colorization\results\output_colorized.png -Force
+```
+
+生成灰度图和并排对比图：
+
+```powershell
+python -c "from pathlib import Path; from PIL import Image, ImageOps; root=Path('homework13_colorization'); inp=root/'data/input/input_image.jpg'; gray_path=root/'results/input_image_gray.png'; out_path=root/'results/output_colorized.png'; cmp_path=root/'results/comparison.png'; gray=ImageOps.grayscale(Image.open(inp)); gray.save(gray_path); left=gray.convert('RGB'); right=Image.open(out_path).convert('RGB'); target_h=900; fit=lambda im: im.resize((round(im.size[0]*target_h/im.size[1]), target_h)); left=fit(left); right=fit(right); canvas=Image.new('RGB',(left.width+right.width,target_h),(255,255,255)); canvas.paste(left,(0,0)); canvas.paste(right,(left.width,0)); canvas.save(cmp_path)"
+```
+
+### 3. 展示材料建议
+
+报告中建议优先展示 `results/comparison.png`，因为它能直接对比输入灰度图和输出彩色图。随后可以展示 `results/terminal_success.png`，用于说明程序已经成功运行并生成结果。如果版面允许，也可以单独展示 `results/input_image_gray.png` 和 `results/output_colorized.png`。
+
+官方 demo 同时生成了 `results/input_image_colorized_siggraph17.png`。该图可作为补充观察结果，但本次报告的主结果仍以 ECCV16 模型输出为准。
