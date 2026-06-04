@@ -40,3 +40,4 @@ exports/
 !.env.example
 node_modules/
 .cache/
+.vscode/
